@@ -4,7 +4,8 @@ import productsController from './product.controller';
 const productsRouter = express.Router();
 
 // create a product
-productsRouter.post('/',productsController.createProducts);
+productsRouter.post('/', productsController.createProducts);
+productsRouter.get('/', productsController.getAllProducts);
 
 // export product router
 export default productsRouter;

@@ -8,7 +8,7 @@ async function main() {
             `mongodb+srv://${config.db_userName}:${config.db_password}@cluster0.fp7vkua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
         );
         app.listen(config.server_port, () => {
-            console.log(`Example app listening on port ${config.server_port}`);
+            console.log(`Book Server listening on port ${config.server_port}`);
         });
     } catch (err: any) {
         throw new Error(err);
