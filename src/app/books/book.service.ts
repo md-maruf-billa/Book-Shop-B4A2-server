@@ -42,7 +42,7 @@ const updateBookOn_DB = async (bookId: string, updateData: object) => {
 
 // deleted form on DB
 const deleteBookOn_DB = async (bookId: string) => {
-
+    await BookModel.findOneAndUpdate({ _id: bookId }, { isDeleted: true })
 }
 
 // export all product services
@@ -52,4 +52,5 @@ export const bookServices = {
     getAllBookFrom_DB,
     getSpecificBookFrom_DB,
     updateBookOn_DB,
+    deleteBookOn_DB
 };

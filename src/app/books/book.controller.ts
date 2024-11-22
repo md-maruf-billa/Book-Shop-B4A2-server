@@ -91,7 +91,23 @@ const updateBook = async (req: Request, res: Response) => {
 
 // delete a book
 const deleteBook = async (req: Request, res: Response) => {
-    const bookId: string = req?.params?.productId;
+    try {
+        const bookId: string = req?.params?.productId;
+        await bookServices.deleteBookOn_DB(bookId)
+        res.status(200).send({
+            message: 'Book deleted successfully',
+            success: true,
+            data: {},
+        });
+    } catch (err: any) {
+        res.status(500).send({
+            message: 'Internal Server Error',
+            success: false,
+            error: err,
+            stack:
+                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+        });
+    }
 }
 
 // export all controllers
