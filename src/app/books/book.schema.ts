@@ -1,14 +1,16 @@
 import { Schema, model } from 'mongoose';
 import { z } from 'zod';
-import { TProducts } from './product.interface';
+import { TBook } from './book.interface';
+const now = new Date().toISOString();
 
 // Extend TProducts to include createdAt
-export interface TProductsWithDate extends TProducts {
+export interface TBookWithDate extends TBook {
     createdAt: string;
+    updatedAt: string;
 }
 
 // Define the Mongoose schema
-const productSchema = new Schema<TProductsWithDate>(
+const BookSchema = new Schema<TBookWithDate>(
     {
         title: {
             type: String,
@@ -40,7 +42,7 @@ const productSchema = new Schema<TProductsWithDate>(
         description: {
             type: String,
             required: [true, 'Description is required'],
-            minlength: [10, 'Description must be at least 10 characters long'], // Updated to match Zod validation
+            minlength: [10, 'Description must be at least 10 characters long'],
         },
         quantity: {
             type: Number,
@@ -53,17 +55,24 @@ const productSchema = new Schema<TProductsWithDate>(
         },
         createdAt: {
             type: String,
-            required: false, // Auto-added by middleware, not required from client
+            required: false, // Auto-added by middleware
+        },
+        updatedAt: {
+            type: String,
+            required: false, // Auto-added by middleware
         },
     },
-    { strict: true },
+    {
+        strict: true,
+        timestamps: true,
+    },
 );
 
 // Zod validation schema
-export const validateProductSchemaByZod = z.object({
+export const validateBookSchemaByZod = z.object({
     title: z.string().min(1, { message: 'Title is required' }),
     author: z.string().min(1, { message: 'Author is required' }),
-    price: z.number().min(0, { message: 'Price must be grater 0' }),
+    price: z.number().min(0, { message: 'Price must be greater than 0' }),
     category: z.enum(
         ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'],
         {
@@ -76,16 +85,25 @@ export const validateProductSchemaByZod = z.object({
         .min(10, { message: 'Description must be at least 10 characters' }),
     quantity: z
         .number()
-        .int({ message: 'Quantity must be Number' })
-        .min(0, { message: 'Quantity must be grater 0' }),
+        .int({ message: 'Quantity must be a whole number' })
+        .min(0, { message: 'Quantity must be greater than 0' }),
     inStock: z.boolean({ required_error: 'InStock field is required' }),
 });
 
 // Mongoose middleware to add `createdAt` before saving
-productSchema.pre('save', function (next) {
-    this.createdAt = new Date().toISOString();
+BookSchema.pre('save', function (next) {
+    if (!this.createdAt) {
+        this.createdAt = now;
+    }
+    this.updatedAt = now;
+    next();
+});
+
+// Middleware to update `updatedAt` before updates
+BookSchema.pre('findOneAndUpdate', function (next) {
+    this.set({ updatedAt: now });
     next();
 });
 
 // Create and export the model
-export const ProductsModel = model<TProductsWithDate>('Product', productSchema);
+export const BookModel = model<TBookWithDate>('Book', BookSchema);
