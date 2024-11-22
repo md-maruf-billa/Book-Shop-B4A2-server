@@ -14,12 +14,12 @@ const getAllBookFrom_DB = async (searchTerm: string) => {
     // if have query param
     const query = searchTerm
         ? {
-              $or: [
-                  { title: { $regex: searchTerm, $options: 'i' } },
-                  { author: { $regex: searchTerm, $options: 'i' } },
-                  { category: { $regex: searchTerm, $options: 'i' } },
-              ],
-          }
+            $or: [
+                { title: { $regex: searchTerm, $options: 'i' } },
+                { author: { $regex: searchTerm, $options: 'i' } },
+                { category: { $regex: searchTerm, $options: 'i' } },
+            ],
+        }
         : {};
     const result = await BookModel.find(query);
     return result;
@@ -33,12 +33,17 @@ const getSpecificBookFrom_DB = async (bookId: string) => {
 
 // get specific book and update on DB
 const updateBookOn_DB = async (bookId: string, updateData: object) => {
-    const result = await BookModel.findByIdAndUpdate(bookId, updateData, {
+    const result = await BookModel.findOneAndUpdate({ _id: bookId }, updateData, {
         new: true,
-        runValidators: true,
+        runValidators: true
     });
     return result;
 };
+
+// deleted form on DB
+const deleteBookOn_DB = async (bookId: string) => {
+
+}
 
 // export all product services
 

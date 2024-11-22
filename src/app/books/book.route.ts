@@ -13,5 +13,8 @@ bookRouter.get('/:productId', bookController.getSpecificBook);
 // get Specific Book and update id
 bookRouter.put('/:productId', bookController.updateBook);
 
+// delete a book
+bookRouter.put('/:productId', bookController.deleteBook)
+
 // export product router
 export default bookRouter;

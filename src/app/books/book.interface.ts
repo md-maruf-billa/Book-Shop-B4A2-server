@@ -3,12 +3,15 @@ export type TBook = {
     author: string;
     price: number;
     category:
-        | 'Fiction'
-        | 'Science'
-        | 'SelfDevelopment'
-        | 'Poetry'
-        | 'Religious';
+    | 'Fiction'
+    | 'Science'
+    | 'SelfDevelopment'
+    | 'Poetry'
+    | 'Religious';
     description: string;
     quantity: number;
     inStock: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    isDeleted: boolean;
 };

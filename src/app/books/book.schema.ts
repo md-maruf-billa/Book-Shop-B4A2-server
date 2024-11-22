@@ -1,16 +1,9 @@
 import { Schema, model } from 'mongoose';
 import { z } from 'zod';
 import { TBook } from './book.interface';
-const now = new Date().toISOString();
-
-// Extend TProducts to include createdAt
-export interface TBookWithDate extends TBook {
-    createdAt: string;
-    updatedAt: string;
-}
 
 // Define the Mongoose schema
-const BookSchema = new Schema<TBookWithDate>(
+const BookSchema = new Schema<TBook>(
     {
         title: {
             type: String,
@@ -61,10 +54,14 @@ const BookSchema = new Schema<TBookWithDate>(
             type: String,
             required: false, // Auto-added by middleware
         },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        }
+
     },
     {
         strict: true,
-        timestamps: true,
     },
 );
 
@@ -88,10 +85,15 @@ export const validateBookSchemaByZod = z.object({
         .int({ message: 'Quantity must be a whole number' })
         .min(0, { message: 'Quantity must be greater than 0' }),
     inStock: z.boolean({ required_error: 'InStock field is required' }),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
+    isDeleted: z.boolean().optional().default(false),
+
 });
 
 // Mongoose middleware to add `createdAt` before saving
 BookSchema.pre('save', function (next) {
+    const now = new Date().toISOString();
     if (!this.createdAt) {
         this.createdAt = now;
     }
@@ -99,11 +101,11 @@ BookSchema.pre('save', function (next) {
     next();
 });
 
-// Middleware to update `updatedAt` before updates
+// update time stamp when update document
 BookSchema.pre('findOneAndUpdate', function (next) {
-    this.set({ updatedAt: now });
+    this.set({ updatedAt: new Date().toISOString() });
     next();
 });
 
 // Create and export the model
-export const BookModel = model<TBookWithDate>('Book', BookSchema);
+export const BookModel = model<TBook>('Book', BookSchema);

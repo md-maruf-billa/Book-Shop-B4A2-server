@@ -89,12 +89,18 @@ const updateBook = async (req: Request, res: Response) => {
     }
 };
 
+// delete a book
+const deleteBook = async (req: Request, res: Response) => {
+    const bookId: string = req?.params?.productId;
+}
+
 // export all controllers
 const bookController = {
     createBook,
     getAllBooks,
     getSpecificBook,
     updateBook,
+    deleteBook
 };
 
 export default bookController;
