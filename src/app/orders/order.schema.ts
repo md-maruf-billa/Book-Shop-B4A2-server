@@ -3,39 +3,42 @@ import mongoose, { Schema, model } from 'mongoose';
 import z from 'zod';
 import TOrder from './order.interfase';
 
-const OrderSchema = new Schema<TOrder>({
-    email: {
-        type: String,
-        required: true,
+const OrderSchema = new Schema<TOrder>(
+    {
+        email: {
+            type: String,
+            required: true,
+        },
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+        },
+        quantity: {
+            type: Number,
+            required: true,
+        },
+        totalPrice: {
+            type: Number,
+            required: true,
+        },
+        createdAt: {
+            type: String,
+            required: false,
+        },
+        updatedAt: {
+            type: String,
+            required: false,
+        },
+        isCanceled: {
+            type: Boolean,
+            default: false,
+        },
     },
-    product: {
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
+    {
+        versionKey: false,
     },
-    quantity: {
-        type: Number,
-        required: true,
-    },
-    totalPrice: {
-        type: Number,
-        required: true,
-    },
-    createdAt: {
-        type: String,
-        required: false,
-    },
-    updatedAt: {
-        type: String,
-        required: false,
-    },
-    isCanceled: {
-        type: Boolean,
-        default: false,
-    },
-},{
-    versionKey:false
-});
+);
 
 // Mongoose middleware to add `createdAt` before saving
 OrderSchema.pre('save', function (next) {

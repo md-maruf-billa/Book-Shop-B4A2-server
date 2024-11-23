@@ -19,7 +19,7 @@ const createBook = async (req: Request, res: Response) => {
             message: 'Validation failed',
             success: false,
             error: err,
-            stack: err?.stack
+            stack: err?.stack,
         });
     }
 };
@@ -29,9 +29,7 @@ const getAllBooks = async (req: Request, res: Response) => {
     try {
         const query: string = req?.query.searchTerm?.toString() || '';
         const result = await bookServices.getAllBookFrom_DB(query);
-        res
-        .status(200)
-        .send({
+        res.status(200).send({
             message: 'Books retrieved successfully',
             success: true,
             data: result,
@@ -41,7 +39,7 @@ const getAllBooks = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack
+            stack: err?.stack,
         });
     }
 };
@@ -51,15 +49,12 @@ const getSpecificBook = async (req: Request, res: Response) => {
     try {
         const bookId = req?.params?.productId;
         const result = await bookServices.getSpecificBookFrom_DB(bookId);
-        if (result == "not found") {
-            res.
-                status(404)
-                .send({
-                    message: 'Book not found!!',
-                    success: false,
-                });
-        }
-        else {
+        if (result == 'not found') {
+            res.status(404).send({
+                message: 'Book not found!!',
+                success: false,
+            });
+        } else {
             res.status(200).send({
                 message: 'Books retrieved successfully',
                 success: true,
@@ -71,7 +66,7 @@ const getSpecificBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack
+            stack: err?.stack,
         });
     }
 };
@@ -92,7 +87,7 @@ const updateBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack
+            stack: err?.stack,
         });
     }
 };
@@ -112,7 +107,7 @@ const deleteBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack
+            stack: err?.stack,
         });
     }
 };

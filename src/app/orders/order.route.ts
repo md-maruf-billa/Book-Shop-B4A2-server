@@ -4,7 +4,7 @@ const orderRouter = express.Router();
 
 // make a order
 orderRouter.post('/', orderController.makeOrder);
-orderRouter.get("/revenue", orderController.calculateRevenue)
+orderRouter.get('/revenue', orderController.calculateRevenue);
 
 // export orderRouter
 export default orderRouter;

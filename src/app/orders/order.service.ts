@@ -21,29 +21,26 @@ const saveOrderDataIn_DB = async (orderInfo: TOrder) => {
     return result;
 };
 
-
 //  Calculate Revenue from Orders
 const calculateRevenueOrdersOn_DB = async () => {
     const result = await OrderModel.aggregate([
         {
             $group: {
-                _id: "null",
-                totalRevenue: { $sum: "$totalPrice" }
-            }
-
+                _id: 'null',
+                totalRevenue: { $sum: '$totalPrice' },
+            },
         },
         {
             $project: {
-                _id: 0
-            }
-        }
-    ]
-    )
+                _id: 0,
+            },
+        },
+    ]);
     return result;
-}
+};
 
 // export order services
 export const orderServices = {
     saveOrderDataIn_DB,
-    calculateRevenueOrdersOn_DB
+    calculateRevenueOrdersOn_DB,
 };

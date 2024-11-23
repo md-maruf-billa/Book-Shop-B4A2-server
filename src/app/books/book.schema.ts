@@ -61,7 +61,7 @@ const BookSchema = new Schema<TBook>(
     },
     {
         strict: true,
-        versionKey: false
+        versionKey: false,
     },
 );
 
@@ -107,9 +107,9 @@ BookSchema.pre('findOneAndUpdate', function (next) {
 });
 // filter out of already deleted data
 BookSchema.pre('find', function (next) {
-    this.find({ isDeleted: { $ne: true } })
-    next()
-})
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
 
 // Create and export the model
 export const BookModel = model<TBook>('Book', BookSchema);

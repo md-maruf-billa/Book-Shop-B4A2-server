@@ -10,7 +10,7 @@ const makeOrder = async (req: Request, res: Response) => {
         const result = await orderServices.saveOrderDataIn_DB(validOrderInfo);
         if (result == 'out of stock' || result == 'not found') {
             res.status(404).send({
-                message: 'Opps !! This Book now' + " " + result,
+                message: 'Opps !! This Book now' + ' ' + result,
                 success: false,
             });
         } else {
@@ -21,14 +21,12 @@ const makeOrder = async (req: Request, res: Response) => {
             });
         }
     } catch (err: any) {
-        res
-            .status(500)
-            .send({
-                message: 'Internal Server Error',
-                success: false,
-                error: err,
-                stack: err?.stack
-            });
+        res.status(500).send({
+            message: 'Internal Server Error',
+            success: false,
+            error: err,
+            stack: err?.stack,
+        });
     }
 };
 
@@ -42,18 +40,16 @@ const calculateRevenue = async (req: Request, res: Response) => {
             data: result[0],
         });
     } catch (err: any) {
-        res
-            .status(400)
-            .send({
-                message: 'Validation failed',
-                success: false,
-                error: err,
-                stack: err?.stack
-            });
+        res.status(400).send({
+            message: 'Validation failed',
+            success: false,
+            error: err,
+            stack: err?.stack,
+        });
     }
-}
+};
 
 export const orderController = {
     makeOrder,
-    calculateRevenue
+    calculateRevenue,
 };
