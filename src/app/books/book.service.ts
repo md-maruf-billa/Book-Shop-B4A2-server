@@ -14,12 +14,12 @@ const getAllBookFrom_DB = async (searchTerm: string) => {
     // if have query param
     const query = searchTerm
         ? {
-              $or: [
-                  { title: { $regex: searchTerm, $options: 'i' } },
-                  { author: { $regex: searchTerm, $options: 'i' } },
-                  { category: { $regex: searchTerm, $options: 'i' } },
-              ],
-          }
+            $or: [
+                { title: { $regex: searchTerm, $options: 'i' } },
+                { author: { $regex: searchTerm, $options: 'i' } },
+                { category: { $regex: searchTerm, $options: 'i' } },
+            ],
+        }
         : {};
     const result = await BookModel.find(query);
     return result;
@@ -28,6 +28,9 @@ const getAllBookFrom_DB = async (searchTerm: string) => {
 // Get a Specific Book
 const getSpecificBookFrom_DB = async (bookId: string) => {
     const result = await BookModel.findById(bookId);
+    if (result?.isDeleted) {
+        return "not found"
+    }
     return result;
 };
 

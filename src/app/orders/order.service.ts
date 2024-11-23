@@ -6,7 +6,7 @@ import { OrderModel } from './order.schema';
 const saveOrderDataIn_DB = async (orderInfo: TOrder) => {
     const { product, quantity } = orderInfo;
     const isBookExist = await BookModel.findOne({ _id: product });
-    if (!isBookExist) {
+    if (!isBookExist || isBookExist?.isDeleted) {
         return 'not found';
     }
     if (isBookExist.quantity < quantity) {
@@ -21,7 +21,29 @@ const saveOrderDataIn_DB = async (orderInfo: TOrder) => {
     return result;
 };
 
+
+//  Calculate Revenue from Orders
+const calculateRevenueOrdersOn_DB = async () => {
+    const result = await OrderModel.aggregate([
+        {
+            $group: {
+                _id: "null",
+                totalRevenue: { $sum: "$totalPrice" }
+            }
+
+        },
+        {
+            $project: {
+                _id: 0
+            }
+        }
+    ]
+    )
+    return result;
+}
+
 // export order services
 export const orderServices = {
     saveOrderDataIn_DB,
+    calculateRevenueOrdersOn_DB
 };

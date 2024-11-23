@@ -10,7 +10,7 @@ const makeOrder = async (req: Request, res: Response) => {
         const result = await orderServices.saveOrderDataIn_DB(validOrderInfo);
         if (result == 'out of stock' || result == 'not found') {
             res.status(404).send({
-                message: 'Opps !! This Book now' + result,
+                message: 'Opps !! This Book now' + " " + result,
                 success: false,
             });
         } else {
@@ -21,16 +21,39 @@ const makeOrder = async (req: Request, res: Response) => {
             });
         }
     } catch (err: any) {
-        res.status(400).send({
-            message: 'Validation failed',
-            success: false,
-            error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
-        });
+        res
+            .status(500)
+            .send({
+                message: 'Internal Server Error',
+                success: false,
+                error: err,
+                stack: err?.stack
+            });
     }
 };
 
+//  Calculate Revenue from Orders
+const calculateRevenue = async (req: Request, res: Response) => {
+    try {
+        const result = await orderServices.calculateRevenueOrdersOn_DB();
+        res.status(200).send({
+            message: 'Revenue calculated successfully',
+            status: true,
+            data: result[0],
+        });
+    } catch (err: any) {
+        res
+            .status(400)
+            .send({
+                message: 'Validation failed',
+                success: false,
+                error: err,
+                stack: err?.stack
+            });
+    }
+}
+
 export const orderController = {
     makeOrder,
+    calculateRevenue
 };

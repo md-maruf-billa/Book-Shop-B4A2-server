@@ -19,8 +19,7 @@ const createBook = async (req: Request, res: Response) => {
             message: 'Validation failed',
             success: false,
             error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+            stack: err?.stack
         });
     }
 };
@@ -30,7 +29,9 @@ const getAllBooks = async (req: Request, res: Response) => {
     try {
         const query: string = req?.query.searchTerm?.toString() || '';
         const result = await bookServices.getAllBookFrom_DB(query);
-        res.status(200).send({
+        res
+        .status(200)
+        .send({
             message: 'Books retrieved successfully',
             success: true,
             data: result,
@@ -40,8 +41,7 @@ const getAllBooks = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+            stack: err?.stack
         });
     }
 };
@@ -51,18 +51,27 @@ const getSpecificBook = async (req: Request, res: Response) => {
     try {
         const bookId = req?.params?.productId;
         const result = await bookServices.getSpecificBookFrom_DB(bookId);
-        res.status(200).send({
-            message: 'Books retrieved successfully',
-            success: true,
-            data: result,
-        });
+        if (result == "not found") {
+            res.
+                status(404)
+                .send({
+                    message: 'Book not found!!',
+                    success: false,
+                });
+        }
+        else {
+            res.status(200).send({
+                message: 'Books retrieved successfully',
+                success: true,
+                data: result,
+            });
+        }
     } catch (err: any) {
         res.status(500).send({
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+            stack: err?.stack
         });
     }
 };
@@ -83,8 +92,7 @@ const updateBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+            stack: err?.stack
         });
     }
 };
@@ -104,8 +112,7 @@ const deleteBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack:
-                process.env.NODE_ENV === 'development' ? err.stack : undefined,
+            stack: err?.stack
         });
     }
 };

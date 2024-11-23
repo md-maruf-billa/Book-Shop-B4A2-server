@@ -33,6 +33,8 @@ const OrderSchema = new Schema<TOrder>({
         type: Boolean,
         default: false,
     },
+},{
+    versionKey:false
 });
 
 // Mongoose middleware to add `createdAt` before saving
