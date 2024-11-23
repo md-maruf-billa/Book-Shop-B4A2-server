@@ -14,7 +14,7 @@ bookRouter.get('/:productId', bookController.getSpecificBook);
 bookRouter.put('/:productId', bookController.updateBook);
 
 // delete a book
-bookRouter.delete('/:productId', bookController.deleteBook)
+bookRouter.delete('/:productId', bookController.deleteBook);
 
 // export product router
 export default bookRouter;

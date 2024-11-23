@@ -56,9 +56,8 @@ const BookSchema = new Schema<TBook>(
         },
         isDeleted: {
             type: Boolean,
-            default: false
-        }
-
+            default: false,
+        },
     },
     {
         strict: true,
@@ -88,7 +87,6 @@ export const validateBookSchemaByZod = z.object({
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
     isDeleted: z.boolean().optional().default(false),
-
 });
 
 // Mongoose middleware to add `createdAt` before saving

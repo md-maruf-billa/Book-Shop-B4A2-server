@@ -93,7 +93,7 @@ const updateBook = async (req: Request, res: Response) => {
 const deleteBook = async (req: Request, res: Response) => {
     try {
         const bookId: string = req?.params?.productId;
-        await bookServices.deleteBookOn_DB(bookId)
+        await bookServices.deleteBookOn_DB(bookId);
         res.status(200).send({
             message: 'Book deleted successfully',
             success: true,
@@ -108,7 +108,7 @@ const deleteBook = async (req: Request, res: Response) => {
                 process.env.NODE_ENV === 'development' ? err.stack : undefined,
         });
     }
-}
+};
 
 // export all controllers
 const bookController = {
@@ -116,7 +116,7 @@ const bookController = {
     getAllBooks,
     getSpecificBook,
     updateBook,
-    deleteBook
+    deleteBook,
 };
 
 export default bookController;
