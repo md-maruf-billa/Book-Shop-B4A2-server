@@ -3,8 +3,7 @@ import bookController from './book.controller';
 // create a express router for products route
 const bookRouter = express.Router();
 
-// create a book in db
-bookRouter.post('/', bookController.createBook);
+
 // get all book
 bookRouter.get('/', bookController.getAllBooks);
 //  get Specific Book From_DB
@@ -15,6 +14,8 @@ bookRouter.put('/:productId', bookController.updateBook);
 
 // delete a book
 bookRouter.delete('/:productId', bookController.deleteBook);
+// create a book in db
+bookRouter.post('/', bookController.createBook);
 
 // export product router
 export default bookRouter;

@@ -8,7 +8,9 @@
         "start:dev": "tsnd --respawn ./src/server.ts",
         "lint": "eslint src/**/*.ts",
         "lint:fix": "eslint src/**/*.ts --fix",
-        "format": "prettier . --write"
+        "format": "prettier . --write",
+        "build": "tsc",
+        "start": "node ./dist/server.js"
     },
     "author": "Abumahid Islam",
     "license": "ISC",
