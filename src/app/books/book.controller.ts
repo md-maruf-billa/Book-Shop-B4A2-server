@@ -29,11 +29,19 @@ const getAllBooks = async (req: Request, res: Response) => {
     try {
         const query: string = req?.query.searchTerm?.toString() || '';
         const result = await bookServices.getAllBookFrom_DB(query);
-        res.status(200).send({
-            message: 'Books retrieved successfully',
-            success: true,
-            data: result,
-        });
+        if (result.length == 0) {
+            res.status(400).send({
+                message: 'Opps!! Book not found !',
+                success: false,
+            });
+        }
+        else {
+            res.status(200).send({
+                message: 'Books retrieved successfully',
+                success: true,
+                data: result,
+            });
+        }
     } catch (err: any) {
         res.status(500).send({
             message: 'Internal Server Error',
