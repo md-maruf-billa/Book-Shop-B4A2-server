@@ -27,14 +27,14 @@ const calculateRevenueOrdersOn_DB = async () => {
         {
             $group: {
                 _id: 'null',
-                totalRevenue: { $sum: '$totalPrice' },
-            },
+                totalRevenue: { $sum: '$totalPrice' }
+            }
         },
         {
             $project: {
-                _id: 0,
-            },
-        },
+                _id: 0
+            }
+        }
     ]);
     return result;
 };
@@ -42,5 +42,5 @@ const calculateRevenueOrdersOn_DB = async () => {
 // export order services
 export const orderServices = {
     saveOrderDataIn_DB,
-    calculateRevenueOrdersOn_DB,
+    calculateRevenueOrdersOn_DB
 };

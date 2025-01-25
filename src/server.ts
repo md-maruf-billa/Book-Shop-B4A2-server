@@ -4,9 +4,7 @@ import mongoose from 'mongoose';
 
 async function main() {
     try {
-        await mongoose.connect(
-            `mongodb+srv://${config.db_userName}:${config.db_password}@cluster0.fp7vkua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
-        );
+        await mongoose.connect(config.database_uri);
         app.listen(config.server_port, () => {
             console.log(`Book Server listening on port ${config.server_port}`);
         });

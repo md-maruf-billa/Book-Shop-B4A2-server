@@ -7,16 +7,16 @@ const BookSchema = new Schema<TBook>(
     {
         title: {
             type: String,
-            required: [true, 'Title is required'],
+            required: [true, 'Title is required']
         },
         author: {
             type: String,
-            required: [true, 'Author is required'],
+            required: [true, 'Author is required']
         },
         price: {
             type: Number,
             required: [true, 'Price is required'],
-            min: [0, 'Price must be greater than 0'],
+            min: [0, 'Price must be greater than 0']
         },
         category: {
             type: String,
@@ -27,42 +27,35 @@ const BookSchema = new Schema<TBook>(
                     'Science',
                     'SelfDevelopment',
                     'Poetry',
-                    'Religious',
+                    'Religious'
                 ],
-                message: '{VALUE} is not a valid category',
-            },
+                message: '{VALUE} is not a valid category'
+            }
         },
         description: {
             type: String,
             required: [true, 'Description is required'],
-            minlength: [10, 'Description must be at least 10 characters long'],
+            minlength: [10, 'Description must be at least 10 characters long']
         },
         quantity: {
             type: Number,
             required: [true, 'Quantity is required'],
-            min: [0, 'Quantity must be greater than 0'],
+            min: [0, 'Quantity must be greater than 0']
         },
         inStock: {
             type: Boolean,
-            required: [true, 'InStock is required'],
-        },
-        createdAt: {
-            type: String,
-            required: false, // Auto-added by middleware
-        },
-        updatedAt: {
-            type: String,
-            required: false, // Auto-added by middleware
+            required: [true, 'InStock is required']
         },
         isDeleted: {
             type: Boolean,
-            default: false,
-        },
+            default: false
+        }
     },
     {
         strict: true,
         versionKey: false,
-    },
+        timestamps: true
+    }
 );
 
 // Zod validation schema
@@ -74,8 +67,8 @@ export const validateBookSchemaByZod = z.object({
         ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'],
         {
             message:
-                'Category must be one of: Fiction, Science, SelfDevelopment, Poetry, Religious',
-        },
+                'Category must be one of: Fiction, Science, SelfDevelopment, Poetry, Religious'
+        }
     ),
     description: z
         .string()
@@ -87,24 +80,11 @@ export const validateBookSchemaByZod = z.object({
     inStock: z.boolean({ required_error: 'InStock field is required' }),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
-    isDeleted: z.boolean().optional().default(false),
+    isDeleted: z.boolean().optional().default(false)
 });
 
-// Mongoose middleware to add `createdAt` before saving
-BookSchema.pre('save', function (next) {
-    const now = new Date().toISOString();
-    if (!this.createdAt) {
-        this.createdAt = now;
-    }
-    this.updatedAt = now;
-    next();
-});
 
-// update time stamp when update document
-BookSchema.pre('findOneAndUpdate', function (next) {
-    this.set({ updatedAt: new Date().toISOString() });
-    next();
-});
+
 // filter out of already deleted data
 BookSchema.pre('find', function (next) {
     this.find({ isDeleted: { $ne: true } });
