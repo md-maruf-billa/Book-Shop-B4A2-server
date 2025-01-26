@@ -9,6 +9,7 @@ authRouter.post(
     validateRequest(userValidation.createUserSchema),
     authController.createUser
 );
+authRouter.post("/refresh-token", authController.refreshToken);
 
 authRouter.post('/login', validateRequest(userValidation.loginUserSchema),authController.loginUser);
 

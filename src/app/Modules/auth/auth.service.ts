@@ -2,7 +2,7 @@ import config from '../../config';
 import { UserModel } from '../user/user.model';
 import { TCreateUser, TLoginUser } from './auth.interface';
 import bcrypt from 'bcrypt';
-import { createToken } from './auth.utils';
+import { createToken, verifyToken } from './auth.utils';
 import ms from 'ms';
 
 const createUserIntoDB = async (payload: TCreateUser) => {
@@ -33,30 +33,65 @@ const loginUserFromDB = async (payload: TLoginUser) => {
         throw new Error('Incrrect Password');
     }
     const jwtPayload = {
-        userId: isUserExist._id,
+        userId: isUserExist.email,
         role: isUserExist.role
     };
 
     const accessToken = createToken(
         jwtPayload,
         config.jwt_access_secret as string,
-        config.jwt_access_expires_in as ms.StringValue 
-      );
-      
-      const refreshToken = createToken(
+        config.jwt_access_expires_in as ms.StringValue
+    );
+
+    const refreshToken = createToken(
         jwtPayload,
         config.jwt_refresh_secret as string,
         config.jwt_refresh_expires_in as ms.StringValue
-      );
-      
+    );
 
     return {
         accessToken,
-        refreshToken,
+        user:jwtPayload,
+        refreshToken
+    };
+};
+const refreshToken = async (token: string) => {
+    const decoded = verifyToken(token, config.jwt_refresh_secret as string);
+
+    const { email,role, iat } = decoded;
+
+    // checking if the user is exist
+    const user = await UserModel.isUserExist(email);
+
+    if (!user) {
+        throw new Error( 'This user is not found !');
+    }
+    // checking if the user is already deleted
+    const isDeleted = user?.isDeleted;
+
+    if (isDeleted) {
+        throw new Error( 'This user is deleted !');
+    }
+
+
+    const jwtPayload = {
+        userId: user.email,
+        role: user.role
+    };
+
+    const accessToken = createToken(
+        jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expires_in as ms.StringValue
+    );
+
+    return {
+        accessToken
     };
 };
 
 export const authServices = {
     createUserIntoDB,
-    loginUserFromDB
+    loginUserFromDB,
+    refreshToken
 };
