@@ -51,7 +51,7 @@ const loginUserFromDB = async (payload: TLoginUser) => {
 
     return {
         accessToken,
-        user:jwtPayload,
+        user:isUserExist,
         refreshToken
     };
 };

@@ -1,28 +1,20 @@
 import { Request, Response } from 'express';
-import { validateBookSchemaByZod } from './book.schema';
 import { TBook } from './book.interface';
 import { bookServices } from './book.service';
+import catchAsync from '../../Utils/catchAsync';
+import manageResponse from '../../Utils/manageResponse';
+import status from 'http-status';
 
 // create products
-const createBook = async (req: Request, res: Response) => {
-    try {
-        const productInfo: TBook = req?.body;
-        const validateProductInfo = validateBookSchemaByZod.parse(productInfo);
-        const result = await bookServices.saveBookData_DB(validateProductInfo);
-        res.status(200).send({
-            message: 'Book created successfully',
-            success: true,
-            data: result,
-        });
-    } catch (err: any) {
-        res.status(400).send({
-            message: 'Validation failed',
-            success: false,
-            error: err,
-            stack: err?.stack,
-        });
-    }
-};
+const createBook = catchAsync(async (req: Request, res: Response) => {
+    const productInfo: TBook = req?.body;
+    console.log(req?.file?.path)
+    const result = await bookServices.saveBookData_DB({
+        ...productInfo,
+        bookImage: req?.file?.path
+    });
+    manageResponse(res, status.OK, 'Book Created Successfully', result);
+});
 
 // get all products
 const getAllBooks = async (req: Request, res: Response) => {
@@ -32,14 +24,13 @@ const getAllBooks = async (req: Request, res: Response) => {
         if (result.length == 0) {
             res.status(400).send({
                 message: 'Opps!! Book not found !',
-                success: false,
+                success: false
             });
-        }
-        else {
+        } else {
             res.status(200).send({
                 message: 'Books retrieved successfully',
                 success: true,
-                data: result,
+                data: result
             });
         }
     } catch (err: any) {
@@ -47,7 +38,7 @@ const getAllBooks = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack,
+            stack: err?.stack
         });
     }
 };
@@ -60,13 +51,13 @@ const getSpecificBook = async (req: Request, res: Response) => {
         if (result == 'not found') {
             res.status(404).send({
                 message: 'Book not found!!',
-                success: false,
+                success: false
             });
         } else {
             res.status(200).send({
                 message: 'Books retrieved successfully',
                 success: true,
-                data: result,
+                data: result
             });
         }
     } catch (err: any) {
@@ -74,7 +65,7 @@ const getSpecificBook = async (req: Request, res: Response) => {
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack,
+            stack: err?.stack
         });
     }
 };
@@ -88,14 +79,14 @@ const updateBook = async (req: Request, res: Response) => {
         res.status(200).send({
             message: 'Book updated successfully',
             success: true,
-            data: result,
+            data: result
         });
     } catch (err: any) {
         res.status(500).send({
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack,
+            stack: err?.stack
         });
     }
 };
@@ -108,14 +99,14 @@ const deleteBook = async (req: Request, res: Response) => {
         res.status(200).send({
             message: 'Book deleted successfully',
             success: true,
-            data: {},
+            data: {}
         });
     } catch (err: any) {
         res.status(500).send({
             message: 'Internal Server Error',
             success: false,
             error: err,
-            stack: err?.stack,
+            stack: err?.stack
         });
     }
 };
@@ -126,7 +117,7 @@ const bookController = {
     getAllBooks,
     getSpecificBook,
     updateBook,
-    deleteBook,
+    deleteBook
 };
 
 export default bookController;
