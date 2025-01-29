@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { TBook } from './book.interface';
-import { bookServices } from './book.service';
 import catchAsync from '../../Utils/catchAsync';
 import manageResponse from '../../Utils/manageResponse';
 import status from 'http-status';
+import { bookServices } from './book.service';
 
 // create products
 const createBook = catchAsync(async (req: Request, res: Response) => {
     const productInfo: TBook = req?.body;
-    console.log(req?.file?.path)
+    console.log(req?.file?.path);
     const result = await bookServices.saveBookData_DB({
         ...productInfo,
         bookImage: req?.file?.path
@@ -17,58 +17,17 @@ const createBook = catchAsync(async (req: Request, res: Response) => {
 });
 
 // get all products
-const getAllBooks = async (req: Request, res: Response) => {
-    try {
-        const query: string = req?.query.searchTerm?.toString() || '';
-        const result = await bookServices.getAllBookFrom_DB(query);
-        if (result.length == 0) {
-            res.status(400).send({
-                message: 'Opps!! Book not found !',
-                success: false
-            });
-        } else {
-            res.status(200).send({
-                message: 'Books retrieved successfully',
-                success: true,
-                data: result
-            });
-        }
-    } catch (err: any) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            success: false,
-            error: err,
-            stack: err?.stack
-        });
-    }
-};
+const getAllBooks = catchAsync(async (req: Request, res: Response) => {
+    const result = await bookServices.getAllBookFrom_DB(req.query);
+    manageResponse(res, status.OK, 'Books Retrieved successfully', result);
+});
 
 // get Specific Book
-const getSpecificBook = async (req: Request, res: Response) => {
-    try {
-        const bookId = req?.params?.productId;
-        const result = await bookServices.getSpecificBookFrom_DB(bookId);
-        if (result == 'not found') {
-            res.status(404).send({
-                message: 'Book not found!!',
-                success: false
-            });
-        } else {
-            res.status(200).send({
-                message: 'Books retrieved successfully',
-                success: true,
-                data: result
-            });
-        }
-    } catch (err: any) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            success: false,
-            error: err,
-            stack: err?.stack
-        });
-    }
-};
+const getSpecificBook = catchAsync(async (req: Request, res: Response) => {
+    const bookId = req?.params?.productId;
+    const result = await bookServices.getSpecificBookFrom_DB(bookId);
+    manageResponse(res, status.OK, 'Book Retrieved successfully', result);
+});
 
 // get specific book and update it
 const updateBook = async (req: Request, res: Response) => {
@@ -111,13 +70,26 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
+const setReview = catchAsync(async (req: Request, res: Response) => {
+    const result = await bookServices.addReviewIntoDB(req.body);
+    manageResponse(res, status.OK, 'Review added successfully', result);
+});
+
+const getAllReviews = catchAsync(async (req: Request, res: Response) => {
+    const { bookId } = req?.params;
+    const result = await bookServices.getAllReviewsFrom_DB(bookId);
+    manageResponse(res, status.OK, 'Reviews retrieved successfully', result);
+});
+
 // export all controllers
 const bookController = {
     createBook,
     getAllBooks,
     getSpecificBook,
     updateBook,
-    deleteBook
+    deleteBook,
+    setReview,
+    getAllReviews
 };
 
 export default bookController;

@@ -7,37 +7,58 @@ const OrderSchema = new Schema<TOrder>(
     {
         email: {
             type: String,
-            required: true,
+            ref: 'User',
+            required: true
         },
+        name: { type: String, required: false },
         product: {
             type: Schema.Types.ObjectId,
-            ref: 'Product',
-            required: true,
+            ref: 'Book',
+            required: true
         },
+        address: {
+            type: String
+        },
+        orderNote: { type: String, required: false },
         quantity: {
             type: Number,
-            required: true,
+            required: true
+        },
+        price: {
+            type: Number,
+            required: true
         },
         totalPrice: {
             type: Number,
-            required: true,
+            required: false
         },
         createdAt: {
             type: String,
-            required: false,
+            required: false
         },
         updatedAt: {
             type: String,
-            required: false,
+            required: false
         },
-        isCanceled: {
-            type: Boolean,
-            default: false,
+        orderInfo: {
+            orderId: String,
+            transactionStatus: String,
+            sp_code: String,
+            sp_message: String,
+            orderInfoStatus: String,
+            verifyPaymentRes: String,
+            method: String,
+            date_time: String
         },
+        orderStatus: {
+            type: String,
+            enum: ['Pending', 'Shipped', 'Delivered', 'Canceled'],
+            default: 'Pending'
+        }
     },
     {
-        versionKey: false,
-    },
+        versionKey: false
+    }
 );
 
 // Mongoose middleware to add `createdAt` before saving
@@ -48,23 +69,6 @@ OrderSchema.pre('save', function (next) {
     }
     this.updatedAt = now;
     next();
-});
-
-const objectIdSchema = z
-    .string()
-    .refine((value) => mongoose.isValidObjectId(value), {
-        message: 'Invalid ObjectId format',
-    });
-
-// zod validation for OrderSchema
-export const orderValidationSchemaWithZod = z.object({
-    email: z.string().email('Invalid email address'),
-    product: objectIdSchema,
-    quantity: z.number().int().min(1, 'Quantity must be at least 1'),
-    totalPrice: z.number().min(0, 'Total price must be at least 1'),
-    createdAt: z.string().optional(),
-    updatedAt: z.string().optional(),
-    isCanceled: z.boolean().default(false),
 });
 
 export const OrderModel = model<TOrder>('orders', OrderSchema);

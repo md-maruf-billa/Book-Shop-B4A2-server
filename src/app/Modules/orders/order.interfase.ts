@@ -2,17 +2,27 @@ import { ObjectId } from 'mongoose';
 
 // define a order data type
 type TOrder = {
-    // customer email type
     email: string;
-    // product id
+    name?:string;
+    address: string;
     product: ObjectId | string;
-    // order quantity
+    orderNote: string;
+    orderStatus: 'Pending' | 'Paid' | 'Cancelled' | 'Completed';
+    orderInfo?: {
+        orderId: string;
+        transactionStatus: string;
+        sp_code: string;
+        sp_message: string;
+        orderInfoStatus: string;
+        verifyPaymentRes: string;
+        method: string;
+        date_time: string;
+    };
     quantity: number;
-    // total price -> quantity * product per price
-    totalPrice: number;
+    price: number;
+    totalPrice?: number;
     createdAt?: string;
     updatedAt?: string;
-    isCanceled: boolean;
 };
 
 export default TOrder;

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { z } from 'zod';
-import { TBook } from './book.interface';
+import { TBook, TBookReview } from './book.interface';
 
 // Define the Mongoose schema
 const BookSchema = new Schema<TBook>(
@@ -74,15 +74,24 @@ const BookSchema = new Schema<TBook>(
         }
     },
     {
-        strict: true,
         versionKey: false,
         timestamps: true
     }
 );
 
-// Zod validation schema
+const ReviewSchema = new Schema<TBookReview>(
+    {
+        bookId: String,
+        reviewerPhoto: String,
+        reviewerName: String,
+        reviewerEmail: String,
+        empression: String,
+        feedBack: String,
+        rating: Number
+    },
+    { versionKey: false, timestamps: true }
+);
 
-// filter out of already deleted data
 BookSchema.pre('find', function (next) {
     this.find({ isDeleted: { $ne: true } });
     next();
@@ -90,3 +99,4 @@ BookSchema.pre('find', function (next) {
 
 // Create and export the model
 export const BookModel = model<TBook>('Book', BookSchema);
+export const ReviewModel = model<TBookReview>('Review', ReviewSchema);

@@ -24,10 +24,18 @@ bookRouter.post(
         req.body = JSON.parse(req.body.data);
         next();
     },
-
     validateRequest(bookValidations.createBookValidationZodSchema),
     bookController.createBook
 );
+
+//  for review
+bookRouter.post(
+    '/review',
+    validateRequest(bookValidations.bookReviewSchema),
+    bookController.setReview
+);
+
+bookRouter.get(`/review/:bookId`, bookController.getAllReviews)
 
 // export product router
 export default bookRouter;

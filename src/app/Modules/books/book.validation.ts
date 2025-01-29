@@ -4,7 +4,7 @@ const createBookValidationZodSchema = z.object({
     title: z.string().min(1, { message: 'Title is required' }),
     author: z.string().min(1, { message: 'Author is required' }),
     price: z.number().min(0, { message: 'Price must be greater than 0' }),
-    bookImage:z.string().optional(),
+    bookImage: z.string().optional(),
     category: z.enum(
         [
             'Fiction',
@@ -35,9 +35,20 @@ const createBookValidationZodSchema = z.object({
         .number()
         .int({ message: 'Quantity must be a whole number' })
         .min(0, { message: 'Quantity must be greater than 0' }),
-    inStock: z.boolean({ required_error: 'InStock field is required' }),
+    inStock: z.boolean({ required_error: 'InStock field is required' })
+});
+
+const bookReviewSchema = z.object({
+    bookId: z.string().min(1), // assuming bookId is a string (could be number if needed)
+    reviewerPhoto: z.string().optional(),
+    reviewerName: z.string(),
+    reviewerEmail: z.string(),
+    empression: z.string(),
+    feedBack: z.string(),
+    rating: z.number()
 });
 
 export const bookValidations = {
-    createBookValidationZodSchema
+    createBookValidationZodSchema,
+    bookReviewSchema
 };

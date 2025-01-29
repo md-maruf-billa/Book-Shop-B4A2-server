@@ -1,34 +1,20 @@
 import { Request, Response } from 'express';
-import { orderValidationSchemaWithZod } from './order.schema';
 import TOrder from './order.interfase';
 import { orderServices } from './order.service';
+import catchAsync from '../../Utils/catchAsync';
+import manageResponse from '../../Utils/manageResponse';
+import status from 'http-status';
 // make a order
-const makeOrder = async (req: Request, res: Response) => {
-    try {
-        const orderInfo: TOrder = req.body;
-        const validOrderInfo = orderValidationSchemaWithZod.parse(orderInfo);
-        const result = await orderServices.saveOrderDataIn_DB(validOrderInfo);
-        if (result == 'out of stock' || result == 'not found') {
-            res.status(404).send({
-                message: 'Opps !! This Book now' + ' ' + result,
-                success: false,
-            });
-        } else {
-            res.status(200).send({
-                message: 'Order created successfully',
-                status: true,
-                data: result,
-            });
-        }
-    } catch (err: any) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            success: false,
-            error: err,
-            stack: err?.stack,
-        });
-    }
-};
+const makeOrder = catchAsync(async (req: Request, res: Response) => {
+    const result = await orderServices.saveOrderDataIn_DB(req.body,req.ip as string);
+    manageResponse(res, status.OK, 'Order saved successfully', result);
+});
+
+const verifyOrder = catchAsync(async (req: Request, res: Response) =>{
+    const { orderId } = req.params;
+    const result = await orderServices.verifyOrderOn_DB(orderId);
+    manageResponse(res, status.OK, 'Order verified successfully', result);
+})
 
 //  Calculate Revenue from Orders
 const calculateRevenue = async (req: Request, res: Response) => {
@@ -37,14 +23,14 @@ const calculateRevenue = async (req: Request, res: Response) => {
         res.status(200).send({
             message: 'Revenue calculated successfully',
             status: true,
-            data: result[0],
+            data: result[0]
         });
     } catch (err: any) {
         res.status(400).send({
             message: 'Validation failed',
             success: false,
             error: err,
-            stack: err?.stack,
+            stack: err?.stack
         });
     }
 };
@@ -52,4 +38,5 @@ const calculateRevenue = async (req: Request, res: Response) => {
 export const orderController = {
     makeOrder,
     calculateRevenue,
+    verifyOrder,
 };
