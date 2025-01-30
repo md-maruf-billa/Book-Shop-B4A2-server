@@ -11,7 +11,13 @@ const userZodValidationSchema = z.object({
     createdAt: z.date().optional(),
     updatedAt: z.date().optional()
 });
+const userUpdateZonValidationSchema = z.object({
+    name: z.string().optional(),
+    address: z.string().optional(),
+    phone: z.string().optional()
+});
 
-export const userValidationSchamas ={
-      userZodValidationSchema
-}
+export const userValidationSchamas = {
+    userZodValidationSchema,
+    userUpdateZonValidationSchema
+};

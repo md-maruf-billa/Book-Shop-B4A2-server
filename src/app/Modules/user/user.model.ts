@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { TUser, UserInterfaceModel } from './user.interface';
 
-const userSchema = new Schema<TUser,UserInterfaceModel>(
+const userSchema = new Schema<TUser, UserInterfaceModel>(
     {
         name: {
             type: String,
@@ -24,6 +24,18 @@ const userSchema = new Schema<TUser,UserInterfaceModel>(
         profileImage: {
             type: String,
             required: false
+        },
+        address: {
+            type: String,
+            required: false
+        },
+        phone: {
+            type: String,
+            required: false
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false
         }
     },
     {
@@ -32,9 +44,10 @@ const userSchema = new Schema<TUser,UserInterfaceModel>(
     }
 );
 
-userSchema.statics.isUserExist = async function (email: string): Promise<TUser | null> {
+userSchema.statics.isUserExist = async function (
+    email: string
+): Promise<TUser | null> {
     return this.findOne({ email });
-  };
+};
 
-
-export const UserModel =model<TUser, UserInterfaceModel>('User', userSchema);
+export const UserModel = model<TUser, UserInterfaceModel>('User', userSchema);

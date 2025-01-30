@@ -5,6 +5,7 @@ import orderRouter from './app/Modules/orders/order.route';
 import authRouter from './app/Modules/auth/auth.route';
 import globalErrorHandler from './app/Errors/globalErrorHandler';
 import cookieParser from 'cookie-parser';
+import userRouter from './app/Modules/user/user.route';
 const app = express();
 
 // Middleware
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use('/api/products', bookRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/auth', authRouter);
+app.use("/api/user",userRouter)
 
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
