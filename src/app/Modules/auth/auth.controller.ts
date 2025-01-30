@@ -21,7 +21,7 @@ const loginUser = catchAsync(async (req, res) => {
         sameSite: config.env_type === 'production' ? 'none' : 'lax',
         maxAge: 1000 * 60 * 60 * 24 * 365
     });
-
+    console.log(user)
     manageResponse(res, status.OK, 'User Login Successfully', { accessToken , user});
 });
 

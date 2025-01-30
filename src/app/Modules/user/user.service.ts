@@ -1,12 +1,13 @@
+import config from '../../config';
 import { TUserUpdate } from './user.interface';
 import { UserModel } from './user.model';
+import bcrypt from 'bcrypt';
 
 const updateUserProfile_Into_DB = async (
     payload: TUserUpdate,
     profileImage: string
 ) => {
     // Check if user exists first
-    console.log(payload.email)
     const existingUser = await UserModel.findOne({ email: payload.email });
 
     if (!existingUser) {
@@ -25,10 +26,35 @@ const updateUserProfile_Into_DB = async (
             }
         },
         { new: true }
-    ).lean(); 
+    ).lean();
+    return result;
+};
+const updatePassword_Into_DB = async (
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+) => {
+    const isExist = await UserModel.isUserExist(userId);
+    if (!isExist) {
+        throw new Error('User not found!');
+    }
+    if (!bcrypt.compareSync(oldPassword, isExist.password)) {
+        throw new Error('Old password is incorrect!');
+    }
+    const hashedPassword = bcrypt.hashSync(
+        newPassword,
+        Number(config.bycript_solt!)
+    );
+    const result = await UserModel.findByIdAndUpdate(
+        isExist._id,
+        { $set: { password: hashedPassword } },
+        { new: true }
+    ).lean();
+
     return result;
 };
 
 export const userSevices = {
-    updateUserProfile_Into_DB
+    updateUserProfile_Into_DB,
+    updatePassword_Into_DB
 };

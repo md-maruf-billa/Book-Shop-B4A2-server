@@ -48,31 +48,30 @@ const loginUserFromDB = async (payload: TLoginUser) => {
         config.jwt_refresh_secret as string,
         config.jwt_refresh_expires_in as ms.StringValue
     );
-
+    isUserExist.password = '';
     return {
         accessToken,
-        user:isUserExist,
+        user: isUserExist,
         refreshToken
     };
 };
 const refreshToken = async (token: string) => {
     const decoded = verifyToken(token, config.jwt_refresh_secret as string);
 
-    const { email,role, iat } = decoded;
+    const { email, role, iat } = decoded;
 
     // checking if the user is exist
     const user = await UserModel.isUserExist(email);
 
     if (!user) {
-        throw new Error( 'This user is not found !');
+        throw new Error('This user is not found !');
     }
     // checking if the user is already deleted
     const isDeleted = user?.isDeleted;
 
     if (isDeleted) {
-        throw new Error( 'This user is deleted !');
+        throw new Error('This user is deleted !');
     }
-
 
     const jwtPayload = {
         userId: user.email,

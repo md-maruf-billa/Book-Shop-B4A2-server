@@ -47,6 +47,10 @@ const saveOrderDataIn_DB = async (orderInfo: TOrder, ip: string) => {
 
     return orderRes.checkout_url;
 };
+const getAllOrderFrom_DB = async (payload: string) => {
+    const result = await OrderModel.find({ email: payload });
+    return result;
+};
 
 //  Calculate Revenue from Orders
 const calculateRevenueOrdersOn_DB = async () => {
@@ -97,5 +101,6 @@ const verifyOrderOn_DB = async (orderId: string) => {
 export const orderServices = {
     saveOrderDataIn_DB,
     calculateRevenueOrdersOn_DB,
-    verifyOrderOn_DB
+    verifyOrderOn_DB,
+    getAllOrderFrom_DB
 };

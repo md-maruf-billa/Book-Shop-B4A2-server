@@ -3,6 +3,7 @@ import upload from '../../Utils/multer.config';
 import validateRequest from '../../Middleware/valideteRequest';
 import { userValidationSchamas } from './user.validation';
 import { userController } from './user.controller';
+import auth from '../../Middleware/auth';
 
 const userRouter = Router();
 
@@ -16,5 +17,7 @@ userRouter.patch(
     validateRequest(userValidationSchamas.userUpdateZonValidationSchema),
     userController.updateUserProfile
 );
+
+userRouter.put("/update-password",auth("user"),userController.updatePassword)
 
 export default userRouter;

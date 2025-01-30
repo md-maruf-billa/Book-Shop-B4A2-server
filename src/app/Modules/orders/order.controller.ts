@@ -6,15 +6,23 @@ import manageResponse from '../../Utils/manageResponse';
 import status from 'http-status';
 // make a order
 const makeOrder = catchAsync(async (req: Request, res: Response) => {
-    const result = await orderServices.saveOrderDataIn_DB(req.body,req.ip as string);
+    const result = await orderServices.saveOrderDataIn_DB(
+        req.body,
+        req.ip as string
+    );
     manageResponse(res, status.OK, 'Order saved successfully', result);
 });
 
-const verifyOrder = catchAsync(async (req: Request, res: Response) =>{
+const verifyOrder = catchAsync(async (req: Request, res: Response) => {
     const { orderId } = req.params;
     const result = await orderServices.verifyOrderOn_DB(orderId);
     manageResponse(res, status.OK, 'Order verified successfully', result);
-})
+});
+const getAllOrder = catchAsync(async (req, res) => {
+    const { userEmail } = req?.params;
+    const result = await orderServices.getAllOrderFrom_DB(userEmail);
+    manageResponse(res, status.OK, 'Orders retrieved successfully', result);
+});
 
 //  Calculate Revenue from Orders
 const calculateRevenue = async (req: Request, res: Response) => {
@@ -39,4 +47,5 @@ export const orderController = {
     makeOrder,
     calculateRevenue,
     verifyOrder,
+    getAllOrder
 };

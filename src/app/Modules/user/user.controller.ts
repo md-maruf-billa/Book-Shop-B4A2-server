@@ -9,6 +9,13 @@ const updateUserProfile = catchAsync(async (req, res) => {
     manageResponse(res, status.OK, 'User profile updated successfully', result);
 });
 
+const updatePassword =catchAsync(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const result = await userSevices.updatePassword_Into_DB(req?.user?.userId, oldPassword, newPassword);
+    manageResponse(res, status.OK, 'Password updated successfully', result);
+})
+
 export const userController = {
-    updateUserProfile
+    updateUserProfile,
+    updatePassword
 };

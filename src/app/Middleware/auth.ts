@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import config from '../config';
 import catchAsync from '../Utils/catchAsync';
 import { UserModel } from '../Modules/user/user.model';
 import { TRole } from '../types/global.type';
+import config from '../config';
 
 
 const auth = (...requiredRoles: TRole[]) => {
@@ -22,9 +21,10 @@ const auth = (...requiredRoles: TRole[]) => {
                         config.jwt_access_secret as string
                   ) as JwtPayload;
             } catch (err) {
+                  console.log(err)
                   throw new Error('Invalid token!');
             }
-            const { role, userId, iat } = decoded;
+            const { role, userId } = decoded;
 
             // checking if the user is exist
             const user = await UserModel.isUserExist(userId);
