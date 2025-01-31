@@ -38,13 +38,29 @@ const getSpecificBookFrom_DB = async (bookId: string) => {
 };
 
 // get specific book and update on DB
-const updateBookOn_DB = async (bookId: string, updateData: object) => {
-    const result = await BookModel.findOneAndUpdate(
-        { _id: bookId },
-        updateData,
+const updateBookOn_DB = async (
+    payload: Record<string, string>,
+    bookImage: string
+) => {
+    const result = await BookModel.findByIdAndUpdate(
+        { _id: payload?.bookId },
         {
-            new: true,
-            runValidators: true
+            $set: {
+                ...(payload.title && { title: payload.title }),
+                ...(payload.author && { author: payload.author }),
+                ...(payload.price && { price: payload.price }),
+                ...(payload.category && { category: payload.category }),
+                ...(payload.description && {
+                    description: payload.description
+                }),
+                ...(payload.quantity && { quantity: payload.quantity }),
+                ...(payload.quantity &&
+                    Number(payload.quantity) > 0 && { inStock: true }),
+                ...(bookImage && { bookImage })
+            }
+        },
+        {
+            new: true
         }
     );
     return result;
@@ -52,7 +68,7 @@ const updateBookOn_DB = async (bookId: string, updateData: object) => {
 
 // deleted form on DB
 const deleteBookOn_DB = async (bookId: string) => {
-    await BookModel.findOneAndUpdate({ _id: bookId }, { isDeleted: true });
+    await BookModel.findByIdAndDelete({ _id: bookId });
 };
 
 const addReviewIntoDB = async (payload: TBookReview) => {

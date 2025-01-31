@@ -17,7 +17,9 @@ userRouter.patch(
     validateRequest(userValidationSchamas.userUpdateZonValidationSchema),
     userController.updateUserProfile
 );
+userRouter.patch("/deactivate-user",auth("admin"), userController.deActivateUser);
 
 userRouter.put("/update-password",auth("user"),userController.updatePassword)
+userRouter.get("/get-all-user", auth("admin"), userController.getAllUsers)
 
 export default userRouter;

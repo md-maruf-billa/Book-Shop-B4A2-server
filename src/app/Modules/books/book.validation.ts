@@ -29,13 +29,20 @@ const createBookValidationZodSchema = z.object({
         message: 'Exchangeable must be one of Exchange and Non Exchangeable'
     }),
     description: z
-        .string()
-        .min(10, { message: 'Description must be at least 10 characters' }),
+        .string(),
     quantity: z
         .number()
         .int({ message: 'Quantity must be a whole number' })
         .min(0, { message: 'Quantity must be greater than 0' }),
     inStock: z.boolean({ required_error: 'InStock field is required' })
+});
+const updateBookSchema = z.object({
+    title: z.string().optional(),
+    author: z.string().optional(),
+    price: z.number().optional(),
+    bookImage: z.string().optional(),
+    description: z.string().optional(),
+    quantity: z.number().optional()
 });
 
 const bookReviewSchema = z.object({
@@ -50,5 +57,6 @@ const bookReviewSchema = z.object({
 
 export const bookValidations = {
     createBookValidationZodSchema,
-    bookReviewSchema
+    bookReviewSchema,
+    updateBookSchema
 };

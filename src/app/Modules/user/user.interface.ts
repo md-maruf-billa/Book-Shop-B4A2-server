@@ -10,6 +10,7 @@ export type TUser = {
     phone?: string;
     role: 'user';
     isDeleted?: boolean;
+    accountStatus?:'blocked'|'active';
 };
 export type TUserUpdate = {
     email: string;

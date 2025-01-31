@@ -30,45 +30,20 @@ const getSpecificBook = catchAsync(async (req: Request, res: Response) => {
 });
 
 // get specific book and update it
-const updateBook = async (req: Request, res: Response) => {
-    try {
-        const bookId: string = req?.params?.productId;
-        const updateData: object = req.body;
-        const result = await bookServices.updateBookOn_DB(bookId, updateData);
-        res.status(200).send({
-            message: 'Book updated successfully',
-            success: true,
-            data: result
-        });
-    } catch (err: any) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            success: false,
-            error: err,
-            stack: err?.stack
-        });
-    }
-};
+const updateBook = catchAsync(async (req: Request, res: Response) => {
+    const result = await bookServices.updateBookOn_DB(
+        req.body,
+        req?.file?.path!
+    );
+    manageResponse(res, status.OK, 'Book updated successfully', result);
+});
 
 // delete a book
-const deleteBook = async (req: Request, res: Response) => {
-    try {
-        const bookId: string = req?.params?.productId;
-        await bookServices.deleteBookOn_DB(bookId);
-        res.status(200).send({
-            message: 'Book deleted successfully',
-            success: true,
-            data: {}
-        });
-    } catch (err: any) {
-        res.status(500).send({
-            message: 'Internal Server Error',
-            success: false,
-            error: err,
-            stack: err?.stack
-        });
-    }
-};
+const deleteBook = catchAsync(async (req: Request, res: Response) => {
+    const bookId: string = req?.params?.productId;
+    await bookServices.deleteBookOn_DB(bookId);
+    manageResponse(res,status.OK,"Book Deleted successfully", {})
+});
 
 const setReview = catchAsync(async (req: Request, res: Response) => {
     const result = await bookServices.addReviewIntoDB(req.body);

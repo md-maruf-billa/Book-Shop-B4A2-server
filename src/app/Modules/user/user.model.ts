@@ -36,6 +36,11 @@ const userSchema = new Schema<TUser, UserInterfaceModel>(
         isDeleted: {
             type: Boolean,
             default: false
+        },
+        accountStatus: {
+            type: String,
+            enum: ['blocked', 'active'],
+            default: 'active'
         }
     },
     {

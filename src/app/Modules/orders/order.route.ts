@@ -20,6 +20,9 @@ orderRouter.get(
     orderController.getAllOrder
 );
 orderRouter.get('/revenue', orderController.calculateRevenue);
+orderRouter.get("/all-orders", auth("admin"), orderController.getAllOrders_For_Admin)
+
+orderRouter.put("/update-order-status/:orderId", auth("admin"),orderController.updateOrderStauts)
 
 // export orderRouter
 export default orderRouter;

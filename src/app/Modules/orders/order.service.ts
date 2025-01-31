@@ -97,10 +97,25 @@ const verifyOrderOn_DB = async (orderId: string) => {
 
     return verifyPaymentRes;
 };
+
+const getAllOrdersFrom_DB_For_Admin = async () => {
+    const result = await OrderModel.find();
+    return result;
+};
+
+const updateOrderStatusOn_DB = async (id: string) => {
+    const orderStatus = await OrderModel.findByIdAndUpdate(id, {
+        orderStatus: 'Completed'
+    });
+    return orderStatus
+};
+
 // export order services
 export const orderServices = {
     saveOrderDataIn_DB,
     calculateRevenueOrdersOn_DB,
     verifyOrderOn_DB,
-    getAllOrderFrom_DB
+    getAllOrderFrom_DB,
+    getAllOrdersFrom_DB_For_Admin,
+    updateOrderStatusOn_DB
 };

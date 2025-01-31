@@ -43,9 +43,22 @@ const calculateRevenue = async (req: Request, res: Response) => {
     }
 };
 
+const getAllOrders_For_Admin = catchAsync(async(req,res) => {
+    const result = await orderServices.getAllOrdersFrom_DB_For_Admin();
+    manageResponse(res, status.OK, 'Orders retrieved successfully', result);
+})
+
+const updateOrderStauts = catchAsync(async (req: Request, res: Response) => {
+    const { orderId } = req.params;
+    const result = await orderServices.updateOrderStatusOn_DB(orderId);
+    manageResponse(res, status.OK, 'Order status updated successfully', result);
+})
+
 export const orderController = {
     makeOrder,
     calculateRevenue,
     verifyOrder,
-    getAllOrder
+    getAllOrder,
+    getAllOrders_For_Admin,
+    updateOrderStauts
 };

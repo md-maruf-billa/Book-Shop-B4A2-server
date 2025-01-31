@@ -53,8 +53,26 @@ const updatePassword_Into_DB = async (
 
     return result;
 };
-
+const getAllUsersFrom_DB = async () => {
+    const result = await UserModel.find({
+        role: 'user'
+    }).lean();
+    return result;
+};
+const deActivateUser_From_DB = async (payload: {
+    email: string;
+    accountStatus: 'blocked' | 'active';
+}) => {
+    const result =await UserModel.findOneAndUpdate(
+        { email: payload?.email },
+        { $set: { accountStatus: payload?.accountStatus } },
+        { new: true }
+    ).lean();
+    return result;
+};
 export const userSevices = {
     updateUserProfile_Into_DB,
-    updatePassword_Into_DB
+    updatePassword_Into_DB,
+    getAllUsersFrom_DB,
+    deActivateUser_From_DB
 };
