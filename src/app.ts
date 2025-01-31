@@ -13,7 +13,10 @@ app.use(express.json());
 app.use(express.raw());
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: [
+            'https://mahidbooksfrontend.vercel.app',
+            'http://localhost:5173'
+        ],
         credentials: true
     })
 );
@@ -22,7 +25,7 @@ app.use(cookieParser());
 app.use('/api/products', bookRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/auth', authRouter);
-app.use("/api/user",userRouter)
+app.use('/api/user', userRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
@@ -30,7 +33,6 @@ app.get('/', (req: Request, res: Response) => {
         message: 'Server is successfully running 🏃‍➡️🏃‍➡️🏃‍➡️'
     });
 });
-
 
 app.use(globalErrorHandler);
 // export app for server.ts page can easily access

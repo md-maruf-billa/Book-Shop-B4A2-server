@@ -21,7 +21,6 @@ const auth = (...requiredRoles: TRole[]) => {
                         config.jwt_access_secret as string
                   ) as JwtPayload;
             } catch (err) {
-                  console.log(err)
                   throw new Error('Invalid token!');
             }
             const { role, userId } = decoded;

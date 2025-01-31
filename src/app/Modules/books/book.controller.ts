@@ -8,7 +8,6 @@ import { bookServices } from './book.service';
 // create products
 const createBook = catchAsync(async (req: Request, res: Response) => {
     const productInfo: TBook = req?.body;
-    console.log(req?.file?.path);
     const result = await bookServices.saveBookData_DB({
         ...productInfo,
         bookImage: req?.file?.path

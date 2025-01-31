@@ -1,0 +1,561 @@
+{
+	"info": {
+		"_postman_id": "e0dacfe6-508f-4589-b2db-34841f1a61b7",
+		"name": "Book Shop (v-1.0.1)",
+		"description": "Hello everyone! My name is Abumahid Islam, and today I’m excited to present my project, **Book Shop.**\n\nThis project is a RESTful API built using **Express.js**, **TypeScript**, and **MongoDB**. It is designed to manage a book inventory and handle customer orders efficiently while ensuring data integrity through Mongoose schema validation.\"\n\n---\n\n**This application provides the following features:**\n\n- \"CRUD operations for managing books and orders.\"\n    \n- \"Inventory management to update stock levels automatically when orders are placed.\"\n    \n- \"Error handling with meaningful responses for validation errors or insufficient stock.\"\n    \n- \"Revenue calculation using MongoDB’s aggregation pipeline.\"\n    \n\n**Technologies Used**\n\n- \"The backend is built with **Express.js** for creating the API, **TypeScript** for strong type safety, and **MongoDB** as the database.\"\n    \n- \"I’ve used **Mongoose** for schema definitions and **dotenv** for managing environment variables. Development tools like **ts-node-dev** were used for a seamless workflow.\"\n    \n\n---\n\n**Folder Structure**\n\n- \"The project is modular and organized into the following main folders:\"\n    \n    - \"`src/app/books/`: Handles all operations related to books.\"\n        \n    - \"`src/app/orders/`: Manages customer orders, including placing orders and calculating revenue.\"\n        \n    - \"`src/app/config/`: Contains the configuration files for connecting to MongoDB and managing environment variables.\"\n        \n- \"Each module—Books and Orders—follows a structured pattern with files for interfaces, schemas, routes, controllers, and services.\"\n    \n\n**Example**\n\n- \"For instance, in the `Books` module, the `book.schema.ts` defines the Mongoose schema with properties like `title`, `author`, `price`, and `category`. This ensures data validation at the database level.\"\n    \n- \"The `book.route.ts` sets up the endpoints like `/api/products` for creating or fetching books, and these routes are linked to the `book.controller.ts`, where the main API logic resides.\"\n    \n\n---\n\nLet’s start the application using `npm run dev` and test the APIs with a tool like Postman.\n\n- \"First, let’s create a new book using the `/api/products` endpoint. I’ll send a POST request with the book details, and as you can see, the book is successfully added to the database.\"\n    \n- \"Next, let’s retrieve all books using the `/api/products` endpoint. The response includes all the books, and we can also search by category, author, or title using query parameters.\"\n    \n- \"To place an order, I’ll send a POST request to the `/api/orders` endpoint. The inventory is automatically updated, and the total price is calculated.\"\n    \n- \"Lastly, I’ll fetch the revenue using the `/api/orders/revenue` endpoint, which shows the total revenue generated.\"\n    \n\n\"In summary, **Book Shop** is a robust API that provides a complete backend solution for managing books and orders. With features like inventory management, revenue calculation, and schema validation, it ensures both functionality and reliability.\"\n\n\"In the future, I plan to add user authentication, payment integration, and a frontend for better usability.\"\n\n- \"Thank you for watching! If you have any questions or suggestions, feel free to reach out. You can also find the project code on my GitHub. Have a great day!\"",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37626622"
+	},
+	"item": [
+		{
+			"name": "Book Management",
+			"item": [
+				{
+					"name": "Get All Books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "searchTerm",
+									"value": "Mystery",
+									"disabled": true
+								},
+								{
+									"key": "inStock",
+									"value": "false",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a book",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/products/6740d96a988fea335b492b2a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"6740d96a988fea335b492b2a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Specific Book by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/6740dd9afb5e21695263cd91",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"6740dd9afb5e21695263cd91"
+							]
+						},
+						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Post a Book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "data",
+									"value": "{\n  \"title\": \"Banglar Itihas\",\n  \"author\": \"Unknown Writer\",\n  \"price\": 40,\n  \"category\": \"Religious\",\n  \"description\": \"Master the art of focus to thrive in life.\",\n  \"quantity\": 12,\n  \"inStock\": true,\n  \"publishYear\": 2005,\n  \"exchangeable\": \"Exchangeable\"\n};",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DEV@MARUF/Downloads/sarafat.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "update a book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 25,\r\n    \"quantity\": 50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/products/6740dd9afb5e21695263cd91",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"products",
+								"6740dd9afb5e21695263cd91"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Get all user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJtYXJ1ZkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzgyNjU0NDIsImV4cCI6MTczODUyNDY0Mn0.OoQZrCDe3uCUl7KJqPuNQB0TkH2jogQJ3bg6DJMrl3U",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/user/get-all-user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"get-all-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DEV@MARUF/Downloads/sarafat.jpg"
+								},
+								{
+									"key": "data",
+									"value": "{\n    \"email\":\"afrin@gmail.com\",\n    \"name\":\"Abumahid\",\n    \"address\":\"Dhaka\",\n    \"phone\":\"0125555\"\n}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/update-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"update-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"Hello\",\r\n    \"newPassword\":\"Maruf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/update-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Management",
+			"item": [
+				{
+					"name": "Make a order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"maruf@gmail.com\",\r\n    \"product\": \"6797edb6d9f6c656b25c1be3\",\r\n    \"quantity\": 1,\r\n    \"price\": 25,\r\n    \"address\":\"Bangladesh\",\r\n    \"orderNote\":\"Hello\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify order",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"maruf@gmail.com\",\r\n  \"product\": \"6740b5ba8e5d029b8fae6d61\",\r\n  \"quantity\": 1,\r\n  \"totalPrice\": 25\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/orders/verify-order/SP679a6bded4b5d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"orders",
+								"verify-order",
+								"SP679a6bded4b5d"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "SP679a6bded4b5d",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Maruf\",\r\n    \"email\":\"maruf@gmail.com\",\r\n    \"password\":\"123456\",\r\n    \"role\":\"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server:local}}/api/auth/create-user",
+							"host": [
+								"{{server:local}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"create-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"maruf@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server:local}}/api/auth/login",
+							"host": [
+								"{{server:local}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Server Start Point",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						""
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
